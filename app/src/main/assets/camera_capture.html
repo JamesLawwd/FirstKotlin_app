@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        body {
+  padding: 40px 8px;
+}
+
+    </style>
+</head>
+<body>
+
+<form method="post" class="row">
+    <div class="col-md-6">
+        <h2>Live Image/Video Capture</h2>
+        <p><label>Camera Rear Facing Camera Image <input id="standardImageCapture" type="file" accept="image/*" capture="camera"></label></p>
+
+        <p><label>Selfie Image<input id="frontImage" type="file" accept="image/*" capture="user"></p>
+
+
+    </div>
+</form>
+
+
+<button onclick="stop();gum('user')">Front</button>
+<button onclick="stop();gum('environment')">Back</button>
+<div id="div"></div><br>
+<video id="video" height="320" autoplay></video>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+<script>
+          var gum = mode =>
+  navigator.mediaDevices.getUserMedia({video: {facingMode: {exact: mode}}})
+  .then(stream => (video.srcObject = stream))
+  .catch(e => log(e));
+
+console.log(video)
+
+var stop = () => video.srcObject && video.srcObject.getTracks().forEach(t => t.stop());
+
+var log = msg => div.innerHTML += msg + "<br>";
+</script>
+
+</body>
+</html>

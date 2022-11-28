@@ -1,0 +1,155 @@
+<!doctype html>
+
+<style>
+     .chart {
+position: absolute;
+width: 100%;
+Height: 100%
+}
+
+</style>
+
+<html><body>
+<button class="play" type="button" style="padding: 10px;background: brown;color:#fff;"> CLICK TO PLAY GAME TO DRAW ANOTATION >></button><hr/>
+
+<script>
+
+    var chart = LightweightCharts.createChart(document.body, {
+    width: 1000,
+  height: 400,
+  timeScale: {
+                rightOffset: 50,
+                barSpacing: 10,
+                fixLeftEdge: false,
+                lockVisibleTimeRangeOnResize: true,
+                rightBarStaysOnScroll: true,
+                borderVisible: true,
+                visible: true,
+                timeVisible: true,
+                secondsVisible: true,
+                borderColor: 'rgba(197, 203, 206, 0.8)',
+                textColor: 'rgba(255, 255, 255, 0.9)',
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+                layout: {
+                    backgroundColor: '#000000',
+                    textColor: 'rgba(255, 255, 255, 0.9)',
+                },
+                grid: {
+                    visible: false,
+                    vertLines: {
+                        color: 'rgba(42, 46, 57, 0)',
+                    },
+                    horzLines: {
+                        color: 'rgba(42, 46, 57, 0.6)',
+                    },
+                },
+
+                priceScale: {
+                    borderColor: 'rgba(197, 203, 206, 0.8)',
+                },
+});
+
+
+var lineSeries = chart.addLineSeries({
+      //color: '#f48fb1',
+      //lineStyle: 0,
+      //lineWidth: 2,
+      drawCrosshairMarker: true,
+      crosshairMarkerRadius: 6,
+      //lineType: 2,
+});
+/*volumeSeries = chart.addHistogramSeries({
+                color: '#26a69a',
+                lineWidth: 2,
+                priceFormat: {
+                    type: 'volume',
+                },
+                overlay: true,
+                scaleMargins: {
+                    top: 0.8,
+                    bottom: 0,
+                },
+                lastValueVisible: true
+            });*/
+chart.subscribeClick(function(param){
+  console.log(`An user clicks at (${param.point.x}, ${param.point.y}) point, the time is ${param.time}`);
+});
+
+            lineSeries.applyOptions({
+                lastValueVisible: true,
+                priceFormat: {
+                    minMove: 0.00001,
+                    precision: 8,
+                },
+                localization: {
+                 locale: 'en-US',
+                 },
+            });
+var data = [
+    { time: CurrentTime(), value: 0.10000 },
+  { time: CurrentTime() + 60 * 60 * 5, value: 0.40000 },
+
+];
+
+lineSeries.setData(data);
+
+/*lineSeries.setMarkers([
+    {
+        time: CurrentTime(),
+                position: 'aboveBar',
+                color: 'yellow',
+        shape: 'arrowDown',
+    }
+]);*/
+function CurrentTime(){
+   return Math.round(new Date().getTime()/1000);
+}
+//alert(Math.round(new Date().getTime()/1000));
+var row;
+var vdata = [];
+function FetchData(){
+var randomNum = Number((Math.random() * 0.9).toFixed(8));
+   row = { time: CurrentTime(), value: randomNum };
+
+                    vdata.push(row);
+    lineSeries.update(row);
+                    /*lineSeries.update(row);
+
+    markers.push({ time: CurrentTime(), position: 'belowBar', color: 'red', shape: 'arrowUp' });
+
+    lineSeries.setMarkers(markers);*/
+
+}
+setInterval(FetchData, 500);
+
+
+$('.play').click(function(){
+ var timer = (Math.round(new Date().getTime()/1000) - 0);
+var markers = [
+    {
+        time: timer,
+                position: 'belowBar',
+                color: 'green',
+        shape: 'arrowUp',
+    },
+     {
+        time: timer,
+                position: 'aboveBar',
+                color: 'red',
+        shape: 'arrowDown',
+        },
+];
+   lineSeries.setMarkers(markers);
+ // alert("Make Drawing");
+});
+
+</script>
+</body>
+</html>
+
+<!-- I Want The Annotation Static on the spot without moving with the line and i should be able to have as much as possible -->
+
+
